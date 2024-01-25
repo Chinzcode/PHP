@@ -7,12 +7,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         require_once "dbh.inc.php";
-        // prepare sql 
-        $query = "INSERT INTO users (username, pwd, email) VALUES (?, ?, ?)";
+        
+        // prepare sql and bind parameters
+        $query = "INSERT INTO users (username, pwd, email) VALUES (:username, :pwd, :email);";
         
         $stmt = $pdo->prepare($query);
 
-        $stmt->execute([$username, $pwd, $email]);
+        $stmt->bindParam(":username", $username);
+        $stmt->bindParam(":pwd", $pwd);
+        $stmt->bindParam(":email", $email);
+
+        $stmt->execute();
 
         $pdo = null;
         $stmt = null; 
@@ -26,3 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 } else {
     header("Location: ../index.php");
 }
+
+//Non-named parameters
+//$query = "INSERT INTO users (username, pwd, email) VALUES (?, ?, ?)";
+//$stmt->execute([$username, $pwd, $email]);
