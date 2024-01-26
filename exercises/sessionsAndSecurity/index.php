@@ -1,3 +1,13 @@
+<?php
+// session_start();
+// $_SESSION["username"] = "Solberg";
+// unset($_SESSION["username"]);
+// session_unset();
+// session_destroy();
+
+require_once 'config.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
