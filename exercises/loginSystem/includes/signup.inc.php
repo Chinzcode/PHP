@@ -10,10 +10,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         require_once 'signup_model.inc.php';
         require_once 'signup_control.inc.php';
 
-        // ERROR HANDLERS
         $errors = [];
 
-        if (function is_input_empty($username, $pwd, $email)) {
+        if (is_input_empty($username, $pwd, $email)) {
             $errors["empty_input"] = "Fill in all fields!";
         }
         if (is_email_invalid($email)) {
@@ -30,9 +29,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if ($errors) {
             $_SESSION["errors_signup"] = $errors;
-            header("location: ../index.php")
+
+            $signupData = [
+                "username" => $username,
+                "email" => $email,
+            ];
+
+            $_SESSION["signup_data"] = $signupData;
+
+            header("location: ../index.php");
+            die();
         }
 
+        create_user($pdo, $pwd, $username, $email);
+
+        header("location: ../index.php?signup=success");
+
+        $pdo = null;
+        $stmt = null;
+
+        die();
     } catch (PDOException $e) {
         die("Query failed: " . $e->getMessage());
     }
